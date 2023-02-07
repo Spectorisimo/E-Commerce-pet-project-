@@ -22,15 +22,9 @@ class UserViewSet(ViewSet):
             data=request.data
         )
         serializer.is_valid(raise_exception=True)
-        user = CustomUser.objects.get(email=serializer.validated_data['email'])
-        token, _ = Token.objects.get_or_create(user=user)
+        tokens = self.user_services.create_token(data=serializer.validated_data)
 
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email,
-        })
-
+        return Response(tokens)
     def get_user(self, request, *args, **kwargs):
         serializer = GetUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
