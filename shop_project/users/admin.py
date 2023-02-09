@@ -3,7 +3,7 @@ from .models import CustomUser
 
 
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('email',)
+    list_display = ('phone_number','email',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
     )

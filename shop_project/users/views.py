@@ -5,7 +5,7 @@ from rest_framework.viewsets import ViewSet
 from . import services
 from .models import CustomUser
 from rest_framework.authtoken.models import Token
-from .serializers import CreateUserSerializer,CreateTokenSerializer,GetUserSerializer
+from .serializers import CreateUserSerializer, CreateTokenSerializer, GetUserSerializer, VerifyUserSerializer
 
 
 class UserViewSet(ViewSet):
@@ -14,7 +14,13 @@ class UserViewSet(ViewSet):
     def create_user(self, request, *args, **kwargs):
         serializer = CreateUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.user_services.create_user(data=serializer.validated_data)
+        data = self.user_services.create_user(data=serializer.validated_data)
+        return Response(data)
+
+    def verify_user(self, request, *args, **kwargs):
+        serializer = VerifyUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.user_services.verify_user(data=serializer.validated_data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def create_token(self, request, *args, **kwargs):
@@ -25,6 +31,7 @@ class UserViewSet(ViewSet):
         tokens = self.user_services.create_token(data=serializer.validated_data)
 
         return Response(tokens)
+
     def get_user(self, request, *args, **kwargs):
         serializer = GetUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

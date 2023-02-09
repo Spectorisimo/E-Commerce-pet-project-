@@ -20,7 +20,4 @@ class UserRepositoryV1:
         return self.model.objects.create(**data)
 
     def get_user(self, data: OrderedDict):
-        user = get_object_or_404(self.model, email=data['email'])
-        if not user.check_password(data['password']):
-            raise self.model.DoesNotExist
-        return user
+        return get_object_or_404(self.model, **data)
