@@ -1,6 +1,6 @@
 from .models import Product, ProductImage
 from typing import Protocol
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Min, Q
 
 
 class ProductRepositoryInterface(Protocol):
@@ -19,7 +19,8 @@ class ProductRepositoryV1:
 
     @staticmethod
     def get_products() -> QuerySet[Product]:
-        return Product.objects.all().prefetch_related('product_images')
+        return Product.objects.all().prefetch_related('product_images').annotate(
+            min_amount=Min('seller_products__amount', filter=Q(seller_products__is_active=True)))
 
 
 class ProductImageRepositoryV1:

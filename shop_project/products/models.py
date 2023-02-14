@@ -21,6 +21,8 @@ class Product(models.Model):
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
+    def __str__(self):
+        return str(self.title)
 
 class ProductImage(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)

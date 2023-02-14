@@ -3,6 +3,7 @@ from .models import Product, ProductImage
 
 
 class _ProductImageSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ProductImage
         fields = ('image',)
@@ -18,9 +19,11 @@ class RetrieveProductSerializer(serializers.ModelSerializer):
 
 
 class _ProductSerializer(serializers.ModelSerializer):
+    min_amount = serializers.DecimalField(read_only=True,decimal_places=2,max_digits=14)
+
     class Meta:
         model = Product
-        fields = ('title', 'body', 'main_image', 'data', 'is_top', 'is_active')
+        fields = ('title', 'body', 'main_image', 'data', 'is_top', 'is_active','min_amount')
 
 
 class RetrieveProductImageSerializer(serializers.ModelSerializer):
