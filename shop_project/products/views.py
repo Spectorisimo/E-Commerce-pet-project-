@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from . import services
 from .serializers import RetrieveProductSerializer, RetrieveProductImageSerializer
 from utils import mixins
-from .permissions import IsMe
+from . import permissions
 
 
 class ProductViewSet(mixins.ActionSerializerMixin, ModelViewSet):
@@ -14,12 +14,8 @@ class ProductViewSet(mixins.ActionSerializerMixin, ModelViewSet):
     }
     product_service: services.ProductServiceInterface = services.ProductServiceV1()
     queryset = product_service.get_products()
+    permission_classes = permissions.IsAdminOrReadOnly,
     serializer_class = RetrieveProductSerializer
-    def get_permissions(self):
-        if self.action in ('list','retrieve'):
-            return AllowAny(),
-        return IsMe(),
-
 
 
 class ProductImageViewSet(mixins.ActionSerializerMixin, ModelViewSet):
@@ -27,5 +23,6 @@ class ProductImageViewSet(mixins.ActionSerializerMixin, ModelViewSet):
         'retrieve': RetrieveProductImageSerializer,
     }
     product_image_service: services.ProductImageServiceInterface = services.ProductImageServiceV1()
+    permission_classes = permissions.IsAdminOrReadOnly,
     queryset = product_image_service.get_product_images()
     serializer_class = RetrieveProductImageSerializer

@@ -1,11 +1,14 @@
-from rest_framework.permissions import BasePermission
-from .models import Product
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-class IsMe(BasePermission):
+
+class IsAdminOrReadOnly(BasePermission):
 
     def has_permission(self, request, view):
-        return bool(request.user
-                    and request.user.is_authenticated
-                    )
-    def has_object_permission(self, request, view, obj: Product):
-        return obj.user == request.user
+        return bool(
+            request.method in SAFE_METHODS or
+            request.user and
+            request.user.is_authenticated and
+            request.user.is_stuff
+        )
+
+
