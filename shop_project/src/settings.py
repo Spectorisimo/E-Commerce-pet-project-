@@ -28,11 +28,13 @@ environ.Env.read_env(BASE_DIR / '.env')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'phonenumber_field',
     'drf_yasg',
+    'channels',
     # apps
     'products',
     'users',
@@ -81,8 +84,8 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'src.wsgi.application'
+ASGI_APPLICATION = "src.asgi.application"
+# WSGI_APPLICATION = 'src.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -209,4 +212,13 @@ SWAGGER_SETTINGS = {
             'in': 'header',
         }
     }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }
